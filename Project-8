@@ -1,0 +1,214 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Product Listing Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #333;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .filters input,
+    .filters select {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      flex: 1;
+      min-width: 150px;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 10px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .card h4 {
+      margin: 10px 0 5px;
+    }
+
+    .price {
+      font-weight: bold;
+      color: green;
+    }
+
+    .rating {
+      color: orange;
+    }
+
+    @media (max-width: 600px) {
+      .filters {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🛒 My E-Commerce Store</h1>
+</header>
+
+<div class="container">
+  <!-- Filters -->
+  <div class="filters">
+    <input type="text" id="search" placeholder="Search product..." oninput="filterProducts()">
+    <select id="category" onchange="filterProducts()">
+      <option value="">All Categories</option>
+      <option value="electronics">Electronics</option>
+      <option value="fashion">Fashion</option>
+      <option value="books">Books</option>
+    </select>
+    <select id="price" onchange="filterProducts()">
+      <option value="">Any Price</option>
+      <option value="0-50">Under ₹50</option>
+      <option value="50-100">₹50 - ₹100</option>
+      <option value="100-9999">Above ₹100</option>
+    </select>
+    <select id="rating" onchange="filterProducts()">
+      <option value="">Any Rating</option>
+      <option value="4">4★ & above</option>
+      <option value="3">3★ & above</option>
+    </select>
+  </div>
+
+  <!-- Product Grid -->
+  <div class="products" id="productGrid">
+    <!-- Cards will be injected here -->
+  </div>
+</div>
+
+<script>
+  const products = [
+    {
+      name: "Bluetooth Headphones",
+      category: "electronics",
+      price: 99,
+      rating: 4.5,
+      image: "https://via.placeholder.com/300x200?text=Headphones"
+    },
+    {
+      name: "Men's T-Shirt",
+      category: "fashion",
+      price: 45,
+      rating: 4.1,
+      image: "https://via.placeholder.com/300x200?text=T-Shirt"
+    },
+    {
+      name: "Programming Book",
+      category: "books",
+      price: 120,
+      rating: 4.8,
+      image: "https://via.placeholder.com/300x200?text=Book"
+    },
+    {
+      name: "Smart Watch",
+      category: "electronics",
+      price: 150,
+      rating: 3.9,
+      image: "https://via.placeholder.com/300x200?text=Smart+Watch"
+    },
+    {
+      name: "Jeans Pants",
+      category: "fashion",
+      price: 89,
+      rating: 4.2,
+      image: "https://via.placeholder.com/300x200?text=Jeans"
+    },
+    {
+      name: "Notebook Pack",
+      category: "books",
+      price: 30,
+      rating: 4.0,
+      image: "https://via.placeholder.com/300x200?text=Notebook"
+    }
+  ];
+
+  function displayProducts(filtered = products) {
+    const grid = document.getElementById("productGrid");
+    grid.innerHTML = "";
+    if (filtered.length === 0) {
+      grid.innerHTML = "<p>No products found.</p>";
+      return;
+    }
+
+    filtered.forEach(product => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <img src="${product.image}" alt="${product.name}">
+        <h4>${product.name}</h4>
+        <p class="price">₹${product.price}</p>
+        <p class="rating">⭐ ${product.rating}</p>
+      `;
+      grid.appendChild(card);
+    });
+  }
+
+  function filterProducts() {
+    const search = document.getElementById("search").value.toLowerCase();
+    const category = document.getElementById("category").value;
+    const price = document.getElementById("price").value;
+    const rating = parseFloat(document.getElementById("rating").value) || 0;
+
+    let filtered = products.filter(product => {
+      const matchSearch = product.name.toLowerCase().includes(search);
+      const matchCategory = category ? product.category === category : true;
+      const matchRating = product.rating >= rating;
+
+      let matchPrice = true;
+      if (price) {
+        const [min, max] = price.split("-").map(Number);
+        matchPrice = product.price >= min && product.price <= max;
+      }
+
+      return matchSearch && matchCategory && matchPrice && matchRating;
+    });
+
+    displayProducts(filtered);
+  }
+
+  // Load initial products
+  displayProducts();
+</script>
+
+</body>
+</html>
