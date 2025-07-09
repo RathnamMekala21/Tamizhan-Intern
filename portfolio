@@ -1,0 +1,35 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rathnam Mekala - Personal Homepage</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Rathnam Mekala</h1>
+      <p>2nd Year B.Tech Student | Future Software Developer | Passionate about Tech, AI & Innovation</p>
+    </header>
+
+    <section class="bio">
+      <h2>About Me</h2>
+      <p>Hello! I'm Rathnam, currently pursuing my B.Tech at Ramachandra College of Engineering, Eluru. I enjoy exploring technology, building innovative projects, and learning to code. I also love contributing to ideas that benefit society like educational platforms and assistive tech tools.</p>
+    </section>
+
+    <section class="contact">
+      <h2>Connect with Me</h2>
+      <ul>
+        <li><a href="mailto:rathnam@email.com">📧 Email Me</a></li>
+        <li><a href="https://www.linkedin.com/in/rathnammekala" target="_blank">🔗 LinkedIn</a></li>
+        <li><a href="https://github.com/rathnammekala" target="_blank">💻 GitHub</a></li>
+      </ul>
+    </section>
+
+    <footer>
+      <p>© 2025 Rathnam Mekala. All rights reserved.</p>
+    </footer>
+  </div>
+</body>
+</html>
