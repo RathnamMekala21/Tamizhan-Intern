@@ -1,0 +1,309 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>To-Do List</title>
+  <!-- Using Poppins from Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #4F46E5;
+      --primary-dark: #4338CA;
+      --secondary: #F3F4F6;
+      --danger: #EF4444;
+      --text-dark: #111827;
+      --text-muted: #6B7280;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--secondary);
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: var(--text-dark);
+    }
+    
+    input[type="text"] {
+      width: 70%;
+      padding: 10px;
+      margin-right: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    
+    button {
+      padding: 10px 15px;
+      border: none;
+      background-color: var(--primary);
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+    
+    button:hover {
+      background-color: var(--primary-dark);
+    }
+    
+    ul {
+      list-style: none;
+      margin-top: 20px;
+    }
+    
+    li {
+      background: #f9f9f9;
+      margin-bottom: 10px;
+      padding: 12px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    li .task-text {
+      flex-grow: 1;
+      margin-right: 10px;
+      /* Clicking the text no longer toggles completion; users have a dedicated button now */
+    }
+    
+    .completed .task-text {
+      text-decoration: line-through;
+      color: var(--text-muted);
+    }
+    
+    .actions button {
+      margin-left: 5px;
+      font-size: 0.9em;
+    }
+    
+    .actions button.delete {
+      background-color: var(--danger);
+    }
+    
+    .actions button.edit {
+      background-color: #80aaff;
+      color: black;
+    }
+    
+    .actions button.complete {
+      background-color: #00cccc;
+    }
+    
+    .actions button.complete.undo {
+      background-color: #006666;
+    }
+    
+    .timestamp {
+      font-size: 0.75em;
+      color: var(--text-muted);
+      margin-top: 5px;
+    }
+    
+    .filters {
+      text-align: center;
+      margin-top: 15px;
+    }
+    
+    .filters button {
+      margin: 5px;
+      background-color: #e0e7ff;
+      color: #1e40af;
+    }
+    
+    .filters button.active {
+      background-color: var(--primary);
+      color: white;
+    }
+    
+    @media (max-width: 600px) {
+      input[type="text"] {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+    
+      button {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+    
+      .filters {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>📝 To-Do List</h2>
+    <div>
+      <input type="text" id="taskInput" placeholder="Enter new task" />
+      <button onclick="addTask()">Add</button>
+    </div>
+
+    <div class="filters">
+      <button id="filter-all" onclick="setFilter('all')">All</button>
+      <button id="filter-completed" onclick="setFilter('completed')">Completed</button>
+      <button id="filter-pending" onclick="setFilter('pending')">Pending</button>
+    </div>
+
+    <ul id="taskList"></ul>
+  </div>
+
+  <script>
+    let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    let currentFilter = 'all';
+    
+    // Save tasks array to localStorage
+    function saveTasks() {
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+    
+    // Set current filter and update active button styling
+    function setFilter(filter) {
+      currentFilter = filter;
+      document.querySelectorAll(".filters button").forEach(btn => btn.classList.remove('active'));
+      document.getElementById(filter-${filter}).classList.add('active');
+      renderTasks();
+    }
+    
+    // Render tasks based on the current filter
+    function renderTasks() {
+      const list = document.getElementById('taskList');
+      list.innerHTML = '';
+      
+      // Map with original index so we can reference the task in the original array
+      let filteredTasks = tasks.map((task, i) => ({...task, originalIndex: i}))
+                               .filter(task => {
+                                 if (currentFilter === 'completed') return task.completed;
+                                 if (currentFilter === 'pending') return !task.completed;
+                                 return true;
+                               });
+      
+      filteredTasks.forEach(task => {
+        const li = document.createElement('li');
+        if (task.completed) li.classList.add('completed');
+        
+        const textDiv = document.createElement('div');
+        textDiv.className = 'task-text';
+        textDiv.textContent = task.name;
+        
+        const timestamp = document.createElement('div');
+        timestamp.className = 'timestamp';
+        timestamp.textContent = new Date(task.time).toLocaleString();
+        
+        const taskInfo = document.createElement('div');
+        taskInfo.style.flexGrow = 1;
+        taskInfo.appendChild(textDiv);
+        taskInfo.appendChild(timestamp);
+        
+        const actions = document.createElement('div');
+        actions.className = 'actions';
+        
+        // Complete/Undo button:
+        const completeBtn = document.createElement('button');
+        // If not completed, show "Complete"; if completed, show "Undo"
+        if (!task.completed) {
+          completeBtn.textContent = 'Complete';
+          completeBtn.className = 'complete';
+        } else {
+          completeBtn.textContent = 'Undo';
+          completeBtn.className = 'complete undo';
+        }
+        completeBtn.onclick = () => toggleTask(task.originalIndex);
+        
+        // Edit button:
+        const editBtn = document.createElement('button');
+        editBtn.innerHTML = '<i class="fas fa-pen"></i>';
+        editBtn.className = 'edit';
+        editBtn.onclick = () => editTask(task.originalIndex);
+        
+        // Delete button:
+        const delBtn = document.createElement('button');
+        delBtn.innerHTML = '<i class="fas fa-trash"></i>';
+        delBtn.className = 'delete';
+        delBtn.onclick = () => deleteTask(task.originalIndex);
+        
+        actions.appendChild(completeBtn);
+        actions.appendChild(editBtn);
+        actions.appendChild(delBtn);
+        
+        li.appendChild(taskInfo);
+        li.appendChild(actions);
+        
+        list.appendChild(li);
+      });
+    }
+    
+    // Add a new task to the list
+    function addTask() {
+      const input = document.getElementById('taskInput');
+      const name = input.value.trim();
+      if (name === '') return alert('Task cannot be empty');
+    
+      tasks.push({
+        name,
+        completed: false,
+        time: Date.now()
+      });
+    
+      input.value = '';
+      saveTasks();
+      renderTasks();
+    }
+    
+    // Toggle the complete state of a task by its original index
+    function toggleTask(index) {
+      tasks[index].completed = !tasks[index].completed;
+      saveTasks();
+      renderTasks();
+    }
+    
+    // Delete a task using its original index
+    function deleteTask(index) {
+      if (confirm('Are you sure you want to delete this task?')) {
+        tasks.splice(index, 1);
+        saveTasks();
+        renderTasks();
+      }
+    }
+    
+    // Edit a task using its original index
+    function editTask(index) {
+      const newName = prompt('Edit task:', tasks[index].name);
+      if (newName) {
+        tasks[index].name = newName;
+        tasks[index].time = Date.now();
+        saveTasks();
+        renderTasks();
+      }
+    }
+    
+    // Initial render with "all" filter active
+    setFilter('all');
+  </script>
+</body>
+</html>
