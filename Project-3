@@ -1,0 +1,157 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Resume Builder</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0; padding: 0;
+      background: #f4f4f4;
+    }
+
+    h1 {
+      text-align: center;
+      padding: 20px;
+      background-color: #2d3e50;
+      color: white;
+    }
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 20px;
+      gap: 20px;
+    }
+
+    form, .resume-preview {
+      flex: 1;
+      min-width: 300px;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    input, textarea {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #2d3e50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .resume-preview {
+      background: #fff;
+    }
+
+    .preview-box {
+      border: 1px solid #ccc;
+      padding: 20px;
+      margin-top: 10px;
+    }
+
+    .section-title {
+      font-weight: bold;
+      margin-top: 10px;
+      color: #333;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<h1>Digital Resume Builder</h1>
+
+<div class="container">
+  <!-- Form -->
+  <form id="resume-form">
+    <h2>Fill Your Details</h2>
+    <input type="text" id="name" placeholder="Full Name" required />
+    <input type="text" id="email" placeholder="Email" required />
+    <input type="text" id="phone" placeholder="Phone" required />
+    <textarea id="education" placeholder="Education Details (e.g. B.Tech in CSE, XYZ University, 2025)" required></textarea>
+    <textarea id="experience" placeholder="Work Experience (e.g. Intern at ABC Corp, June 2024 - Aug 2024)" required></textarea>
+    <textarea id="skills" placeholder="Skills (e.g. HTML, CSS, JavaScript, C++)" required></textarea>
+    <button type="button" onclick="generatePreview()">Generate Preview</button>
+    <button type="button" onclick="downloadPDF()">Download PDF</button>
+  </form>
+
+  <!-- Resume Preview -->
+  <div class="resume-preview">
+    <h2>Resume Preview</h2>
+    <div class="preview-box" id="preview">
+      <h2 id="preview-name">Your Name</h2>
+      <p><strong>Email:</strong> <span id="preview-email"></span></p>
+      <p><strong>Phone:</strong> <span id="preview-phone"></span></p>
+
+      <div class="section-title">Education</div>
+      <p id="preview-education"></p>
+
+      <div class="section-title">Experience</div>
+      <p id="preview-experience"></p>
+
+      <div class="section-title">Skills</div>
+      <p id="preview-skills"></p>
+    </div>
+  </div>
+</div>
+
+<script>
+  function generatePreview() {
+    document.getElementById("preview-name").textContent = document.getElementById("name").value || "Your Name";
+    document.getElementById("preview-email").textContent = document.getElementById("email").value;
+    document.getElementById("preview-phone").textContent = document.getElementById("phone").value;
+    document.getElementById("preview-education").textContent = document.getElementById("education").value;
+    document.getElementById("preview-experience").textContent = document.getElementById("experience").value;
+    document.getElementById("preview-skills").textContent = document.getElementById("skills").value;
+  }
+
+  async function downloadPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    const name = document.getElementById("name").value || "Your Name";
+    const email = document.getElementById("email").value;
+    const phone = document.getElementById("phone").value;
+    const education = document.getElementById("education").value;
+    const experience = document.getElementById("experience").value;
+    const skills = document.getElementById("skills").value;
+
+    doc.setFontSize(18);
+    doc.text(name, 10, 20);
+    doc.setFontSize(12);
+    doc.text(`Email: ${email}`, 10, 30);
+    doc.text(`Phone: ${phone}`, 10, 40);
+
+    doc.text("Education:", 10, 55);
+    doc.text(education, 10, 65);
+
+    doc.text("Experience:", 10, 80);
+    doc.text(experience, 10, 90);
+
+    doc.text("Skills:", 10, 105);
+    doc.text(skills, 10, 115);
+
+    doc.save(`${name.replace(/ /g, "_")}_Resume.pdf`);
+  }
+</script>
+
+</body>
+</html>
