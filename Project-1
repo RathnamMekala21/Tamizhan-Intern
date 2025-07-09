@@ -1,0 +1,73 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Rathnam | Portfolio</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+  <nav>
+    <div class="logo">Rathnam</div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+      
+    </ul>
+    <div class="hamburger">&#9776;</div>
+  </nav>
+
+  <header id="about">
+    <h1>I'm Rathnam</h1>
+    <p>Full-Stack Developer passionate about building web experiences.</p>
+    <div class="social-icons">
+      <a href="https://github.com/yourusername" target="_blank">GitHub</a>
+      <a href="https://linkedin.com/in/username" target="_blank">LinkedIn</a>
+      <a href="https://twitter.com/username" target="_blank">Twitter</a>
+    </div>
+  </header>
+
+  <section id="skills">
+    <h2>Skills</h2>
+    <ul class="skills-grid">
+      <li>HTML5 & CSS3</li>
+      <li>JavaScript / ES6+</li>
+      <li>React / Angular</li>
+      <li>Node.js / Express</li>
+      <li>MongoDB / SQL</li>
+      <li>Git & GitHub</li>
+    </ul>
+  </section>
+
+  <section id="projects">
+    <h2>Projects</h2>
+    <div class="project-grid">
+      <div class="project-card">
+        <h3>Project A</h3>
+        <p>Description of project A.</p>
+        <a href="https://github.com/yourusername/project-a" target="_blank">View Code</a>
+      </div>
+      <div class="project-card">
+        <h3>Project B</h3>
+        <p>Description of project B.</p>
+        <a href="https://github.com/yourusername/project-b" target="_blank">View Code</a>
+      </div>
+      <!-- Add more project cards here -->
+    </div>
+  </section>
+
+  <section id="contact">
+    <h2>Contact</h2>
+    <p>Email me at <a href="mailto:mekalarathnam21@gmail.com">mekalarathnam21@gmail.com</a></p>
+  </section>
+
+  <footer>
+    © 2025 Rathnam
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
